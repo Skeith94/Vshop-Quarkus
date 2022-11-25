@@ -63,7 +63,7 @@ public class UserController  {
                 if(!logged.get().isEnabled()){
                     return Uni.createFrom().item(RestResponse.ok("you are banned for: "+logged.get().getReason(),TEXT_PLAIN_TYPE));
                 }
-                String token= Jwt.issuer("Vblog")
+                String token= Jwt.issuer("Vshop")
                         .upn(logged.get().getUsername())
                         .groups(new HashSet<>(Arrays.asList(logged.get().getRole()))).innerSign().encrypt();
 
