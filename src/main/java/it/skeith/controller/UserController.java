@@ -1,6 +1,7 @@
 package it.skeith.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Uni;
@@ -52,6 +53,7 @@ public class UserController  {
     }
 
 
+
     @POST
     @Path("/login")
     @PermitAll
@@ -65,15 +67,17 @@ public class UserController  {
                 }
                 String token= Jwt.issuer("Vshop")
                         .upn(logged.get().getUsername())
-                        .groups(new HashSet<>(Arrays.asList(logged.get().getRole()))).innerSign().encrypt();
+                        .groups(new HashSet<>(Arrays.asList(logged.get().getRole().getName()))).innerSign().encrypt();
 
                 System.out.println(token);
-                return Uni.createFrom().item(RestResponse.ok(new LoginResponse(logged.get().getUsername(),logged.get().getRole(),token),APPLICATION_JSON_TYPE));
+                return Uni.createFrom().item(RestResponse.ok(new LoginResponse(logged.get().getUsername(),logged.get().getRole().getName(),token),APPLICATION_JSON_TYPE));
             }
             return Uni.createFrom().item(RestResponse.status(RestResponse.Status.BAD_REQUEST, new JsonObject("{\"error\":\"wrong password\"}")));
         }
         return Uni.createFrom().item(RestResponse.status(RestResponse.Status.BAD_REQUEST, new JsonObject("{\"error\":\"wrong email\"}")));
     }
+
+
 
 
     @PermitAll
@@ -84,9 +88,10 @@ public class UserController  {
     public Uni<RestResponse<?>> register(@RequestBody @Valid RegistrerRequest request) throws SystemException{
 
 
-      Optional<Country> country=Optional.ofNullable(Country.findById(request.getCountry_id()).await().indefinitely());
+      Optional<Country> country=Country.findById(request.getCountry_id()).await().asOptional().indefinitely();
+
         if(country.isEmpty()){
-            Uni.createFrom().item(RestResponse.status(RestResponse.Status.BAD_REQUEST, new JsonObject("{\"error\":\"country no exist\"}")));
+           return Uni.createFrom().item(RestResponse.status(RestResponse.Status.BAD_REQUEST, new JsonObject("{\"error\":\"country no exist\"}")));
         }
 
       User user=new User(request.getUsername(), request.getPassword(), request.getEmail(),request.getName(),request.getSurname(),request.getBirth(),request.getAddress(),country.get());
@@ -122,9 +127,6 @@ public class UserController  {
         return userService.persistFlushUser(user.get()).onItem().transform(i->RestResponse.ok("user with id:"+user.get().getId()+" email:"+user.get().getEmail()+" banned",TEXT_PLAIN_TYPE));
     }
 
-
-
-  //
 
 
 

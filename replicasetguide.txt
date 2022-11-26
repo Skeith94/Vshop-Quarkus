@@ -1,0 +1,34 @@
+Guide for create ReplicaSet cluder  on docker
+
+docker network create mongoCluster
+
+docker run -d --rm -p 27017:27017 --name mongo1 --network mongoCluster mongo:5 mongod --replSet myReplicaSet --bind_ip localhost,mongo1
+docker run -d --rm -p 27018:27017 --name mongo2 --network mongoCluster mongo:5 mongod --replSet myReplicaSet --bind_ip localhost,mongo2
+
+mongosh
+
+rs.initiate().
+... rsconf = {
+...     _id : "replicaset",
+...     members: [
+...         {
+...             "_id": 0,
+...             "host": "mongodb1:27017",
+...             "priority": 1
+...         },
+...         {
+...             "_id": 1,
+...             "host": "mongodb2:27017",
+...             "priority": 2
+...         }
+...     ]
+... }
+
+user admin
+db.createUser( { user: "admin",
+                 pwd: "12345",
+                 customData: { employeeId: 12345 },
+                 roles: [ { role: "clusterAdmin", db: "admin" },
+                          { role: "readAnyDatabase", db: "admin" },
+                          "readWrite"] },
+               { w: "majority" , wtimeout: 5000 } )

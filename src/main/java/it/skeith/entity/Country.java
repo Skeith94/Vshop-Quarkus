@@ -45,6 +45,21 @@ public class Country extends PanacheEntityBase {
         this.phoneCode = phoneCode;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Country country = (Country) o;
+
+        return id.equals(country.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     public static Uni<Country> findById(Long id){
         return  find("id",id).firstResult();
     }

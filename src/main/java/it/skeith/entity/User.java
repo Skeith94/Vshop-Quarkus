@@ -35,7 +35,9 @@ public class User {
     @Column(unique = true,nullable = false)
     private String email;
 
-    private String role="User";
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
     @Column(nullable = false,length = 15)
     private LocalDate birth;
     @Column(nullable = false,length = 15)
