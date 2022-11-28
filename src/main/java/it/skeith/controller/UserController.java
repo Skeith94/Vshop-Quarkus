@@ -144,7 +144,7 @@ public class UserController {
     @Path("/addRole/{userId}/{roleId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Uni<Response> createRole(@PathParam("userId") Long userId, @PathParam("roleId") Long roleId) throws SystemException, InterruptedException {
+    public Uni<Response> addRole(@PathParam("userId") Long userId, @PathParam("roleId") Long roleId) throws SystemException, InterruptedException {
 
        Uni<User>user=Panache.withTransaction(()->userService.findById(userId)).onItem()
                .ifNull().failWith(new WebApplicationException("user id no present"));
