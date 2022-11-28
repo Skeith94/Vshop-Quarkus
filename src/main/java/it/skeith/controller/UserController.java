@@ -81,24 +81,25 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Uni<Response> login(@RequestBody @Valid LoginRequest request) {
-        return Panache.withTransaction(()->userService.getByEmail(request.getEmail())).onItem()
 
-    .ifNull().failWith(new WebApplicationException("wrong email")).onItem().transform(logged -> {
+     return Panache.withTransaction(()->userService.getByEmail(request.getEmail())).onItem()
+              .ifNull().failWith(new WebApplicationException("wrong email")).onItem().transform(logged -> {
 
-    if (BCrypt.verifyer().verify(request.getPassword().toCharArray(), logged.getPassword().toCharArray()).verified) {
-               if (!logged.isEnabled()) {
-                 return Response.ok("you are banned for: " + logged.getReason()).type(TEXT_PLAIN_TYPE).build();
+                 if (BCrypt.verifyer().verify(request.getPassword().toCharArray(), logged.getPassword().toCharArray()).verified) {
+                     if (!logged.isEnabled()) {
+                         return Response.ok("you are banned for: " + logged.getReason()).type(TEXT_PLAIN_TYPE).build();
+                     }
+                     String token = Jwt.issuer("Vshop")
+                             .upn(logged.getUsername())
+                             .groups(new HashSet<>(Arrays.asList(logged.getRole().getName()))).innerSign().encrypt();
+
+                     System.out.println(token);
+                     return Response.ok(new LoginResponse(logged.getUsername(), logged.getRole().getName(), token)).type(APPLICATION_JSON_TYPE).build();
+
                  }
+                 return Response.ok("wrong password").type(TEXT_PLAIN_TYPE).build();
 
-      String token = Jwt.issuer("Vshop")
-      .upn(logged.getUsername())
-      .groups(new HashSet<>(Arrays.asList(logged.getRole().getName()))).innerSign().encrypt();
-
-       System.out.println(token);
-       return Response.ok(new LoginResponse(logged.getUsername(), logged.getRole().getName(), token)).type(APPLICATION_JSON_TYPE).build();
-    }
-    return Response.ok("wrong password").type(TEXT_PLAIN_TYPE).build();
-    });
+              });
 
 
     }
@@ -112,13 +113,13 @@ public class UserController {
     @Blocking
     public Uni<Response> bannUser(@RequestBody @Valid BannRequest request)  {
 
-    return  Panache.withTransaction(()->userService.getByEmail(request.getEmail())).onItem().ifNull().failWith(new WebApplicationException("wrong email"))
-            .onItem().transform(user -> {
+    return   Panache.withTransaction(()->userService.getByEmail(request.getEmail())).onItem().ifNull().failWith(new WebApplicationException("wrong email"))
+              .onItem().transform(user -> {
                 user.setEnabled(false);
                 user.setReason(request.getReason());
                 return user;
 
-            }).onItem().transformToUni(user ->userService.persistFlushUser(user)).onItem().transform(userFinish->Response.ok("\"user with id:" + userFinish.getId() + " email:" + userFinish.getEmail() + " banned").type(TEXT_PLAIN_TYPE).build());
+              }).onItem().transformToUni(user ->userService.persistFlushUser(user)).onItem().transform(userFinish->Response.ok("\"user with id:" + userFinish.getId() + " email:" + userFinish.getEmail() + " banned").type(TEXT_PLAIN_TYPE).build());
 
     }
 
@@ -143,11 +144,13 @@ public class UserController {
     @Path("/addRole/{userId}/{roleId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Uni<Response> addRole(@PathParam("userId") Long userId, @PathParam("roleId") Long roleId) throws SystemException, InterruptedException {
+    public Uni<Response> createRole(@PathParam("userId") Long userId, @PathParam("roleId") Long roleId) throws SystemException, InterruptedException {
 
-       Uni<User>user=Panache.withTransaction(()->userService.findById(userId)).onItem().ifNull().failWith(new WebApplicationException("user id no present"));
+       Uni<User>user=Panache.withTransaction(()->userService.findById(userId)).onItem()
+               .ifNull().failWith(new WebApplicationException("user id no present"));
 
-       Uni<Role>role=Panache.withTransaction(()->Role.findById(roleId)).onItem().ifNull().failWith(new WebApplicationException("role id no present"));
+       Uni<Role>role=Panache.withTransaction(()->Role.findById(roleId)).onItem()
+               .ifNull().failWith(new WebApplicationException("role id no present"));
 
        return Uni.combine().all().unis(user,role).asTuple().onItem().transform(tuple->{
 
@@ -184,7 +187,7 @@ public class UserController {
 
         return  new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getName(), request.getSurname(), request.getBirth(), request.getAddress(), tuple.getItem1());
 
-        })
+        })      //waith reattivo
      ).onItem().transformToUni(user -> userService.persistFlushUser(user)).onItem().transform(i->Response.ok().build());
 
 
