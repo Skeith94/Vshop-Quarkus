@@ -8,21 +8,21 @@ docker run -d --rm -p 27018:27017 --name mongo2 --network mongoCluster mongo:5 m
 mongosh
 
 rs.initiate().
-... rsconf = {
-...     _id : "replicaset",
-...     members: [
-...         {
-...             "_id": 0,
-...             "host": "mongodb1:27017",
-...             "priority": 1
-...         },
-...         {
-...             "_id": 1,
-...             "host": "mongodb2:27017",
-...             "priority": 2
-...         }
-...     ]
-... }
+ rsconf = {
+    _id : "replicaset",
+     members: [
+        {
+            "_id": 0,
+            "host": "mongodb1:27017",
+           "priority": 1
+         },
+         {
+            "_id": 1,
+             "host": "mongodb2:27017",
+             "priority": 2
+       }
+     ]
+ }
 
 user admin
 db.createUser( { user: "admin",
