@@ -20,9 +20,10 @@ import java.util.Objects;
 
 @NamedQueries({
         @NamedQuery(name = "User.getByNameEmail", query = "select count(u) from User u where u.email=:email"),
+        @NamedQuery(name = "User.findByUsername", query = "select u from User u where u.username = :username")
 })
 
-public class User extends PanacheEntityBase {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

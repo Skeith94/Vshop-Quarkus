@@ -5,7 +5,6 @@ import io.smallrye.mutiny.Uni;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 
@@ -24,9 +23,7 @@ public class Role extends PanacheEntityBase {
 
     private boolean visible=true;
 
-    public Role(String name) {
-        this.name = name;
-    }
+    public Role(String name) {this.name = name;}
 
     @Override
     public boolean equals(Object o) {
