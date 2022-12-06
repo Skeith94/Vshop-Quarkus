@@ -25,6 +25,7 @@ public class Product {
     private String description;
     @Column(nullable=false)
     private Long price;
+    private Long discount;
     @Column(nullable=false)
     private Long quantity;
     @JsonIgnore

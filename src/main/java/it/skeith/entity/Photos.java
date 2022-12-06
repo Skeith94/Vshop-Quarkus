@@ -5,6 +5,7 @@ import com.mongodb.client.gridfs.model.GridFSFile;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import io.quarkus.mongodb.panache.reactive.ReactivePanacheMongoEntity;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,9 +15,11 @@ import org.bson.BsonBinary;
 import org.bson.types.ObjectId;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import javax.persistence.Lob;
 import java.io.File;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +29,11 @@ import java.nio.file.Files;
 public class Photos extends ReactivePanacheMongoEntity {
 
   private ObjectId id;
+  private String photoName;
   private Long productId;
-  private byte[]  photo;
+  private String format;
+  @Lob
+  private byte[] photo;
 
 
 
@@ -47,12 +53,15 @@ public class Photos extends ReactivePanacheMongoEntity {
   }
 
 
-  public Photos(Long productId, byte[] photo) {
+  public Photos(Long productId, byte[] photo,String format,String photoName) {
     this.productId = productId;
     this.photo = photo;
+    this.format=format;
+    this.photoName=photoName;
   }
 
- public static Uni<Void>save(Photos photos){
-    return persist(photos);
- }
+  public static Uni<List<Photos>> list(Long productId){
+    return  list("productId",productId);
+  }
+
 }

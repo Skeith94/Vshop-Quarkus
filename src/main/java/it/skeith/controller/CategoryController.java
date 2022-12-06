@@ -29,8 +29,7 @@ import java.util.function.Supplier;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
+
 @Slf4j
 @Path("/category")
 @ApplicationScoped

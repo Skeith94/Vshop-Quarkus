@@ -21,6 +21,10 @@ public class ProductService {
         return productRepo.findByname(name);
     }
 
+    public Uni<Product>findById(Long id){
+        return productRepo.findById(id);
+    }
+
 
 
 }
