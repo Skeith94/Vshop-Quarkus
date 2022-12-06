@@ -106,19 +106,16 @@ public class UserController {
 
 
     @RolesAllowed({"Admin"})
-    @Transactional
+    @ReactiveTransactional
     @POST
     @Path("/bann")
-    @Blocking
     public Uni<Response> bannUser(@RequestBody @Valid BannRequest request)  {
-
     return  Panache.withTransaction(()->userService.getByEmail(request.getEmail())).onItem().ifNull().failWith(new WebApplicationException("wrong email"))
             .onItem().transform(user -> {
                 user.setEnabled(false);
                 user.setReason(request.getReason());
-                return user;
-
-            }).onItem().transformToUni(user ->userService.persistFlushUser(user)).onItem().transform(userFinish->Response.ok("\"user with id:" + userFinish.getId() + " email:" + userFinish.getEmail() + " banned").type(TEXT_PLAIN_TYPE).build());
+                return Response.ok("\"user with id:" + user.getId() + " email:" + user.getEmail() + " banned").type(TEXT_PLAIN_TYPE).build();
+            });
 
     }
 

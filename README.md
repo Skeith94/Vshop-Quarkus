@@ -1,7 +1,5 @@
-# VshopQurakus Project
+# VshopQuarkus
 
+Progetto a scopo didattico dove realizzo un eshop utlizzando il framework quarkus sfruttando la programmazione reattiva. 
 
-//IN PROGRESS FIRST COMMIT :) 
-
-
-<p>Implemented first rest api for entity User and JWT Security<p>
+#Incompleto ancora 

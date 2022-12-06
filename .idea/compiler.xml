@@ -8,12 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="vshop" />
+        <module name="Vshop-Quarkus" />
         <module name="VshopQuarkus" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Vshop-Quarkus" options="-parameters" />
       <module name="VshopQuarkus" options="-parameters" />
       <module name="vshop" options="-parameters" />
     </option>

@@ -1,5 +1,6 @@
 package it.skeith.entity;
 
+import at.favre.lib.bytes.Bytes;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
@@ -9,7 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.bson.BsonBinary;
 import org.bson.types.ObjectId;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+
+import java.io.File;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 
 @Getter
 @Setter
@@ -18,9 +25,9 @@ import org.bson.types.ObjectId;
 @MongoEntity
 public class Photos extends ReactivePanacheMongoEntity {
 
-  public ObjectId id;
+  private ObjectId id;
   private Long productId;
-  private GridFSFile photo;
+  private byte[]  photo;
 
 
 
@@ -39,7 +46,13 @@ public class Photos extends ReactivePanacheMongoEntity {
     return id.hashCode();
   }
 
-  public static Uni<Void> save(Photos photos){
-    return save(photos);
+
+  public Photos(Long productId, byte[] photo) {
+    this.productId = productId;
+    this.photo = photo;
   }
+
+ public static Uni<Void>save(Photos photos){
+    return persist(photos);
+ }
 }

@@ -23,6 +23,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "Category.getByIdVisible", query = "select c from Category c where c.id=:categoryId and c.visible=true")
 })
+
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 
-@NamedQueries({
+@NamedQueries(value = {
         @NamedQuery(name = "User.getByNameEmail", query = "select count(u) from User u where u.email=:email"),
         @NamedQuery(name = "User.findByUsername", query = "select u from User u where u.username = :username")
 })
