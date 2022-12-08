@@ -1,5 +1,6 @@
 package it.skeith.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,11 +32,11 @@ public class Category {
     private Long id;
     @Column(unique = true, length = 15)
     String name;
+    @JsonIgnore
     private boolean visible = true;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    Set<Product>products=new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<SubCategory> subCategories = new HashSet<>();
 

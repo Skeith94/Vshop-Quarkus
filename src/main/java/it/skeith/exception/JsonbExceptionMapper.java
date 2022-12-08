@@ -1,22 +1,21 @@
 package it.skeith.exception;
 
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import javax.json.bind.JsonbException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-
 @Provider
-public class JsonbExceptionMapper implements ExceptionMapper<JsonbException> {
+public class JsonbExceptionMapper implements ExceptionMapper<JsonParseException> {
 
     @Override
-    public Response toResponse(JsonbException exception) {
+    public Response toResponse(JsonParseException exception) {
         if( exception.getCause() instanceof JsonParseException ||
-                exception.getCause() instanceof JsonMappingException ) {
+                exception.getCause() instanceof JsonMappingException) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("error parsing json body - " + exception.getMessage())
                     .type(MediaType.TEXT_PLAIN_TYPE)
@@ -29,3 +28,5 @@ public class JsonbExceptionMapper implements ExceptionMapper<JsonbException> {
                 .build();
     }
 }
+
+

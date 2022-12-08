@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 @AllArgsConstructor @NoArgsConstructor @Setter @Getter
 public class ProductRequest {
@@ -15,9 +16,13 @@ public class ProductRequest {
    @NotBlank @Size(min = 3)
    private String description;
    @Positive
-   private Long price;
+   private Float price;
+   @Positive @NotEmpty
+   private Long discount;
    @Min(1)
    private Long quantity;
    @Min(1)
    private Long categoryId;
+   @Min(1) @NotEmpty
+   private List<Long> subCategoryId;
 }

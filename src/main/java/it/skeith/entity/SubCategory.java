@@ -1,5 +1,6 @@
 package it.skeith.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import io.smallrye.mutiny.Uni;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,17 @@ public class SubCategory {
     private Long id;
     @Column(unique = true,length =15)
     String name;
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Category> subCategories = new HashSet<>();
 
+    @JsonIgnore
     boolean visible=true;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="Product_SubCategory",
+            joinColumns = {@JoinColumn(name="subCategory_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name="Product_id", referencedColumnName = "id")}
+    )
+    private Set<Product>products;
 
     @Override
     public boolean equals(Object o) {

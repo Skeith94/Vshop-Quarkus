@@ -11,6 +11,7 @@ import it.skeith.entity.Category;
 import it.skeith.entity.Photos;
 import it.skeith.entity.Role;
 import it.skeith.entity.SubCategory;
+import it.skeith.payload.response.CategorySubCatResponse;
 import it.skeith.service.CategoryService;
 import it.skeith.service.SubCategoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +45,8 @@ public class CategoryController {
     @Path("/save/category")
     public Uni<Response> SaveCategory(@QueryParam("name") String name) {
 
-        Category category = new Category(name);
-        return Panache.withTransaction(() -> categoryService.existCategory(name))
+        Category category = new Category(name.trim().toLowerCase());
+        return Panache.withTransaction(() -> categoryService.existCategory(name.trim().toLowerCase()))
                 .onItem().ifNotNull().transform(e -> Response.status(Response.Status.BAD_REQUEST).entity("category already exist").type(TEXT_PLAIN_TYPE).build())
                 .onItem().ifNull().switchTo(Panache.withTransaction(() -> categoryService.SaveCategory(category)).onItem().transform(c -> Response.status(Response.Status.ACCEPTED).entity(c).build()));
 
@@ -55,12 +56,12 @@ public class CategoryController {
     @Path("/save/sub-category")
     public Uni<Response> SaveSubCategory(@QueryParam("name") String name) {
 
-        SubCategory subCategory=new SubCategory(name);
+        SubCategory subCategory=new SubCategory(name.trim().toLowerCase());
 
-        return Panache.withTransaction(()->categoryService.existCategory(name))
+        return Panache.withTransaction(()->categoryService.existCategory(name.trim().toLowerCase()))
                 .onItem().ifNotNull().transform(e -> Response.status(Response.Status.BAD_REQUEST).entity("you can't use category name for subcategory").type(TEXT_PLAIN_TYPE).build())
                 .onItem().ifNull().switchTo(
-                        Panache.withTransaction(()->subCategoryService.existSubCategory(name))
+                        Panache.withTransaction(()->subCategoryService.existSubCategory(name.trim().toLowerCase()))
                                 .onItem().ifNotNull().transform(e->Response.status(Response.Status.BAD_REQUEST).entity("category already exist").type(TEXT_PLAIN_TYPE).build())
                                 .onItem().ifNull().switchTo(Panache.withTransaction(()->subCategoryService.SaveSubCategory(subCategory).onItem().transform(c -> Response.status(Response.Status.ACCEPTED).entity(c).build())))
 
@@ -82,11 +83,25 @@ public class CategoryController {
 
         return  Uni.combine().all().unis(category,subCategorys).asTuple().onItem().transform(tuple->{
               tuple.getItem1().setSubCategories(tuple.getItem2());
-            return Response.ok().entity(tuple.getItem1()).build();
+            CategorySubCatResponse categorySubCatResponse=new CategorySubCatResponse(tuple.getItem1().getId(),tuple.getItem1().getName(),tuple.getItem1().getSubCategories());
+            return Response.ok().entity(categorySubCatResponse).build();
 
         });
 
     }
+
+
+    @GET
+    @Path("/getCategorySub/{categoryId}")
+    public Uni<Response>GetCategory(@PathParam("categoryId") Long categoryId) {
+        return Panache.withTransaction(()->categoryService.findById(categoryId)).onItem().transform(c->{
+            CategorySubCatResponse categorySubCatResponse=new CategorySubCatResponse(c.getId(),c.getName(),c.getSubCategories());
+           return Response.ok().entity(categorySubCatResponse).build();
+        });
+    }
+
+
+
 
 
 

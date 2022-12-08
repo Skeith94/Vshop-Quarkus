@@ -1,3 +1,4 @@
+C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\controller\PhotosController.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\RegistrerRequest.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\service\ProductService.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\controller\ProductController.java
@@ -11,6 +12,7 @@ C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\Photos.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\LoginResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\repo\UserRepo.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\ProductRequest.java
+C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\CategorySubCatResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\Category.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\DownloadFormData.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\controller\CategoryController.java
@@ -22,6 +24,7 @@ C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\repo\ProductRepo.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\repo\SubCategoryRepo.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\exception\JsonbExceptionMapper.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\SubCategory.java
+C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\UpdateProductRequest.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\repo\CategoryRepo.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\service\SubCategoryService.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\Product.java
