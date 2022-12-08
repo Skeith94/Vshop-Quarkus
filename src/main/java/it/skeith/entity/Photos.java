@@ -1,24 +1,15 @@
 package it.skeith.entity;
 
-import at.favre.lib.bytes.Bytes;
-import com.mongodb.client.gridfs.model.GridFSFile;
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import io.quarkus.mongodb.panache.reactive.ReactivePanacheMongoEntity;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.BsonBinary;
 import org.bson.types.ObjectId;
-import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import javax.persistence.Lob;
-import java.io.File;
-import java.io.ObjectOutputStream;
-import java.nio.file.Files;
 import java.util.List;
 
 @Getter

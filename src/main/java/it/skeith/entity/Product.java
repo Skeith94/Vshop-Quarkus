@@ -2,7 +2,6 @@ package it.skeith.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.skeith.payload.request.UpdateProductRequest;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -74,7 +73,7 @@ public class Product {
 
     public void  updateProduct(UpdateProductRequest request){
         if(request.getName()!=null){
-            this.name=request.getName();
+            this.name=request.getName().trim().toLowerCase();
         }
         if(request.getDescription()!=null){
             this.description=request.getDescription();
@@ -88,6 +87,8 @@ public class Product {
         if(request.getDiscount()!=null){
             this.discount=request.getDiscount();
         }
+
+
     }
 
 }

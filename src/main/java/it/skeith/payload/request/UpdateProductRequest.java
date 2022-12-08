@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -30,4 +31,6 @@ public class UpdateProductRequest {
 
     @Min(1)
     private Long categoryId=null;
+
+    private List<Long> subCategoryId=null;
 }

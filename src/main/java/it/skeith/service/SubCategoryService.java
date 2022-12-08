@@ -1,16 +1,13 @@
 package it.skeith.service;
 
 
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import it.skeith.entity.Category;
 import it.skeith.entity.SubCategory;
 import it.skeith.repo.SubCategoryRepo;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Set;
 
 @ApplicationScoped
 public class SubCategoryService {

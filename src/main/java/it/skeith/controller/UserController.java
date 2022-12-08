@@ -2,13 +2,10 @@ package it.skeith.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.quarkus.hibernate.reactive.panache.Panache;
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
-import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.unchecked.Unchecked;
-import io.vertx.core.json.JsonObject;
 import it.skeith.entity.Country;
 import it.skeith.entity.Role;
 import it.skeith.entity.User;
@@ -18,32 +15,22 @@ import it.skeith.payload.request.RegistrerRequest;
 import it.skeith.payload.response.LoginResponse;
 import it.skeith.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-
-
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-
 import org.jboss.resteasy.reactive.RestQuery;
-import org.jboss.resteasy.reactive.RestResponse;
-import org.jboss.resteasy.reactive.RestSseElementType;
-
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.SystemException;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;

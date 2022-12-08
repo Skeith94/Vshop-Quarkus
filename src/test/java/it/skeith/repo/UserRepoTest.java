@@ -2,8 +2,6 @@ package it.skeith.repo;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class UserRepoTest {
 
     @Test

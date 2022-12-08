@@ -1,21 +1,12 @@
 package it.skeith.service;
 
 
-import io.quarkus.vertx.ConsumeEvent;
-import io.smallrye.common.annotation.Blocking;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.User;
 import it.skeith.repo.UserRepo;
-import org.eclipse.microprofile.context.ManagedExecutor;
-import org.eclipse.microprofile.context.ThreadContext;
-
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.SystemException;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
 
 
 @ApplicationScoped

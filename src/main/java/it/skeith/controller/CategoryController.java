@@ -2,31 +2,20 @@ package it.skeith.controller;
 
 
 import io.quarkus.hibernate.reactive.panache.Panache;
-import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
-import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.Category;
-import it.skeith.entity.Photos;
-import it.skeith.entity.Role;
 import it.skeith.entity.SubCategory;
 import it.skeith.payload.response.CategorySubCatResponse;
 import it.skeith.service.CategoryService;
 import it.skeith.service.SubCategoryService;
 import lombok.extern.slf4j.Slf4j;
-import org.jboss.resteasy.reactive.RestResponse;
 
-import javax.annotation.security.PermitAll;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.util.List;
-import java.util.function.Supplier;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN_TYPE;
 

@@ -6,8 +6,6 @@ import io.smallrye.mutiny.Uni;
 import it.skeith.entity.Category;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.NamedQuery;
-import java.util.List;
 
 @ApplicationScoped
 public class CategoryRepo implements PanacheRepository<Category> {

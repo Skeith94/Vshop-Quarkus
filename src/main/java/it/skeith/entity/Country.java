@@ -1,13 +1,10 @@
 package it.skeith.entity;
 
-import io.quarkus.hibernate.reactive.panache.PanacheEntity;
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import io.smallrye.mutiny.Uni;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.type.descriptor.sql.SmallIntTypeDescriptor;
 
 import javax.persistence.*;
 

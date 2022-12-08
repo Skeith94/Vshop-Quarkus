@@ -1,6 +1,5 @@
 package it.skeith.payload.request;
 
-import it.skeith.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +18,9 @@ public class ProductRequest {
    private Float price;
    @Positive @NotEmpty
    private Long discount;
-   @Min(1)
+   @Min(1) @NotEmpty
    private Long quantity;
-   @Min(1)
+   @Min(1) @NotEmpty
    private Long categoryId;
    @Min(1) @NotEmpty
    private List<Long> subCategoryId;
