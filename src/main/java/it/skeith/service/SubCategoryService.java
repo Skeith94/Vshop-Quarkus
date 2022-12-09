@@ -26,4 +26,8 @@ public class SubCategoryService {
     public Uni<List<SubCategory>> findByIds(List<Long> subCategoryId) {
         return subCategoryRepo.GetBySubCategoryIds(subCategoryId);
     }
+
+
+
+
 }

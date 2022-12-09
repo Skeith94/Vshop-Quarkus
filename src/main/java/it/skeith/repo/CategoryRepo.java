@@ -23,4 +23,7 @@ public class CategoryRepo implements PanacheRepository<Category> {
     public Uni<Category> getById(Long categoryId) {
         return find("#Category.getByIdVisible",Parameters.with("categoryId",categoryId).map()).firstResult();
     }
+
+
+
 }

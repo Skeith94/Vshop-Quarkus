@@ -12,6 +12,7 @@ C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\Photos.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\LoginResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\repo\UserRepo.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\ProductRequest.java
+C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\GetByCategoryResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\CategorySubCatResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\Category.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\DownloadFormData.java

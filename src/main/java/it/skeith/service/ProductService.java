@@ -2,10 +2,12 @@ package it.skeith.service;
 
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.Product;
+import it.skeith.payload.response.GetByCategoryResponse;
 import it.skeith.repo.ProductRepo;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.List;
 
 @ApplicationScoped
 public class ProductService {
@@ -21,10 +23,13 @@ public class ProductService {
         return productRepo.findByname(name);
     }
 
-    public Uni<Product>findById(Long id){
-        return productRepo.findById(id);
+
+    public Uni<Product>getById(Long id){
+        return productRepo.getById(id);
     }
 
 
-
+    public Uni<List<GetByCategoryResponse>> getByCategory(Long id) {
+        return productRepo.getByCategory(id);
+    }
 }

@@ -7,16 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+//@NamedQuery(name = "SubCategory.getByProductId", query = "select new it.skeith.payload.response.GetByProductIdResponse(s,p.id) from SubCategory s left join s.products p  where p.id IN :ids and s.visible=true")
 @NamedQueries({
-        @NamedQuery(name = "SubCategory.getSubCategoryIds", query = "select s from SubCategory s where s.id IN :ids and s.visible=true")
+        @NamedQuery(name = "SubCategory.getSubCategoryIds", query = "select s from SubCategory s where s.id IN :ids and s.visible=true"),
 })
 
 public class SubCategory {
@@ -30,13 +29,6 @@ public class SubCategory {
     @JsonIgnore
     boolean visible=true;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="Product_SubCategory",
-            joinColumns = {@JoinColumn(name="subCategory_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name="Product_id", referencedColumnName = "id")}
-    )
-    private Set<Product>products;
 
     @Override
     public boolean equals(Object o) {

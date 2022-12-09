@@ -8,12 +8,17 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+
+@NamedQueries({
+        @NamedQuery(name = "Product.getById", query ="select p from Product p join fetch p.subCategory join fetch p.category where p.id=:id  and p.visible=true ")
+})
 
 public class Product {
     @Id
@@ -34,16 +39,14 @@ public class Product {
     private boolean visible=true;
     @Column(updatable = false)
     private LocalDateTime insertAt;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="Product_SubCategory",
-            joinColumns = {@JoinColumn(name="Product_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name="subCategory_id", referencedColumnName = "id")}
-    )
-    Set<SubCategory> subCategory;
+    @ManyToMany(fetch = FetchType.LAZY)
+    Set<SubCategory> subCategory= new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -71,6 +74,14 @@ public class Product {
         this.subCategory=subCategories;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void addSubCategory(SubCategory subCategory) {
+        this.subCategory.add(subCategory);
+    }
+
     public void  updateProduct(UpdateProductRequest request){
         if(request.getName()!=null){
             this.name=request.getName().trim().toLowerCase();
@@ -87,6 +98,9 @@ public class Product {
         if(request.getDiscount()!=null){
             this.discount=request.getDiscount();
         }
+
+
+
 
 
     }

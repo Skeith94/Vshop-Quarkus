@@ -20,7 +20,8 @@ import java.util.Set;
 
 
 @NamedQueries({
-        @NamedQuery(name = "Category.getByIdVisible", query = "select c from Category c where c.id=:categoryId and c.visible=true")
+        @NamedQuery(name = "Category.getByIdVisible", query = "select c from Category c left join fetch c.subCategories  where c.id=:categoryId  and c.visible=true"),
+        @NamedQuery(name = "Category.getBySubId", query = "select c from Category c left join c.subCategories cs where cs.id=:id")
 })
 
 public class Category {
@@ -35,7 +36,7 @@ public class Category {
 
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<SubCategory> subCategories = new HashSet<>();
 
     @Override

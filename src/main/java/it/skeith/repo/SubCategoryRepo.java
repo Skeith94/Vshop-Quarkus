@@ -16,4 +16,6 @@ public class SubCategoryRepo implements PanacheRepository<SubCategory> {
         return  list("#SubCategory.getSubCategoryIds", Parameters.with("ids",subcategoryIds));
     }
 
+
+
 }

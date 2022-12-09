@@ -29,4 +29,6 @@ public class CategoryService {
     public Uni<Category>findById(Long categoryId) {
         return categoryRepo.getById(categoryId);
     }
+
+
 }

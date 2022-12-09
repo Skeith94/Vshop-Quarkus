@@ -53,7 +53,7 @@ public class PhotosController {
     @ReactiveTransactional
     public Uni<Response> addPhotos(@PathParam("productId") Long productId, @RestForm @Schema(implementation = UploadItemSchema.class) FileUpload photo) {
 
-        return   Panache.withTransaction(()->productService.findById(productId)).onItem().ifNull().failWith(new WebApplicationException("product not found"))
+        return   Panache.withTransaction(()->productService.getById(productId)).onItem().ifNull().failWith(new WebApplicationException("product not found"))
                 .onItem().ifNotNull().transform(Unchecked.function(product ->{
                     if (photo.size() > imageSize) {
                         throw new WebApplicationException("invalid size");
