@@ -33,7 +33,6 @@ public class ProductRepo implements PanacheRepository<Product> {
         return find("#Product.getById",Parameters.with("id",id).map()).firstResult();
     }
 
-
     public Uni<List<GetByCategoryResponse>> getByCategory(Long id) {
         return sf.withTransaction((s,t)->s.createQuery(
                         "select new it.skeith.payload.response.GetByCategoryResponse(p.id, p.name, p.description, p.price, p.discount, p.quantity,c.id,c.name) from Product p join  p.category c where c.id = :id and p.visible = true",GetByCategoryResponse.class)
