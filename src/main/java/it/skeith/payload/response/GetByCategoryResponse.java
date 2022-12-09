@@ -20,13 +20,11 @@ public class GetByCategoryResponse {
     private String description;
     private Float price;
     private Long discount;
-
     private Long quantity;
-
     private Long categoryId;
     private String categoryName;
-
-    private Set<SubCategory> subCategory= new HashSet<>();
+    public Long subCategoryId;
+    public String subCategoryName;
 
     public GetByCategoryResponse(Long id, String name, String description, Float price, Long discount, Long quantity, Long categoryId, String categoryName) {
         this.id = id;

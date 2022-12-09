@@ -5,12 +5,20 @@ import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.User;
+import org.hibernate.reactive.mutiny.Mutiny;
 
 import javax.enterprise.context.ApplicationScoped;
 
 
 @ApplicationScoped
 public class UserRepo  implements PanacheRepository<User>  {
+
+    Mutiny.SessionFactory sf;
+    public UserRepo(Mutiny.SessionFactory sf) {
+        this.sf = sf;
+    }
+
+
     public Uni<User> findByUsername(String username){
         return find("username",username).firstResult();
     }

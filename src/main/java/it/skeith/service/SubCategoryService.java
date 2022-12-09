@@ -3,6 +3,7 @@ package it.skeith.service;
 
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.SubCategory;
+import it.skeith.payload.response.SubCategoryProductResponse;
 import it.skeith.repo.SubCategoryRepo;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -27,6 +28,9 @@ public class SubCategoryService {
         return subCategoryRepo.GetBySubCategoryIds(subCategoryId);
     }
 
+    public Uni<List<SubCategoryProductResponse>>getSubCategoryProduct(List<Long> ids){
+        return subCategoryRepo.getSubCategoryProduct(ids);
+    }
 
 
 

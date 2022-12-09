@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,6 +27,10 @@ public class SubCategory {
     private Long id;
     @Column(unique = true,length =15)
     String name;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "subCategory",fetch = FetchType.LAZY)
+    Set<Product> products= new HashSet<>();
+
 
     @JsonIgnore
     boolean visible=true;

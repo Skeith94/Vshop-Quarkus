@@ -45,7 +45,13 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
+
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="Product_SubCategory",
+            joinColumns = {@JoinColumn(name="product_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name="subCategory_id", referencedColumnName = "id")}
+    )
     Set<SubCategory> subCategory= new HashSet<>();
 
     @Override

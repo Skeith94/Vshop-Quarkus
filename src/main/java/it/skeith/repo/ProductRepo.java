@@ -6,6 +6,7 @@ import io.quarkus.panache.common.Parameters;
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.Product;
 import it.skeith.payload.response.GetByCategoryResponse;
+import it.skeith.payload.response.SubCategoryProductResponse;
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -39,5 +40,8 @@ public class ProductRepo implements PanacheRepository<Product> {
                 .setParameter("id",id)
                 .getResultList());
     }
+
+
+
 }
 

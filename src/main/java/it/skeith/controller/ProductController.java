@@ -8,6 +8,9 @@ import it.skeith.entity.Product;
 import it.skeith.entity.SubCategory;
 import it.skeith.payload.request.ProductRequest;
 import it.skeith.payload.request.UpdateProductRequest;
+import it.skeith.payload.response.CategorySubCatResponse;
+import it.skeith.payload.response.GetByCategoryResponse;
+import it.skeith.repo.ProductRepo;
 import it.skeith.service.CategoryService;
 import it.skeith.service.ProductService;
 import it.skeith.service.SubCategoryService;
@@ -20,9 +23,8 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 @ApplicationScoped
 @Path("/product")
@@ -31,6 +33,9 @@ public class ProductController {
     CategoryService categoryService;
     @Inject
     ProductService productService;
+
+    @Inject
+    ProductRepo productRepo;
 
     @Inject
     SubCategoryService subCategoryService;
@@ -89,7 +94,6 @@ public class ProductController {
     }
 
     @GET
-    @ReactiveTransactional
     @Path("/GetByid/{id}")
     public Uni<Response> getProduct(@PathParam("id") Long id) {
 
@@ -99,13 +103,40 @@ public class ProductController {
 
 
     @GET
-    @ReactiveTransactional
     @Path("/getByCategory/{CategoryId}")
     public Uni<Response> getByCategory(@PathParam("CategoryId") Long id) {
 
-        return Panache.withTransaction(() -> productService.getByCategory(id)).onItem().ifNull().failWith(new WebApplicationException("product not found"))
-                .onItem().ifNotNull().transform(p ->Response.ok().entity(p).build());
+        List<GetByCategoryResponse>products = new ArrayList<>();
+
+        return Panache.withTransaction(() -> productService.getByCategory(id))
+                .onItem()
+                .ifNull()
+                .failWith(new WebApplicationException("product not found"))
+                .onItem()
+                .ifNotNull()
+                .transform(p ->{
+                    List<Long>ids=new ArrayList<>();
+                    p.forEach(i->ids.add(i.getId()));
+                    products.addAll(p);
+                    return ids;
+                })
+                .onItem()
+                .transformToUni(i -> Panache.withTransaction(() -> subCategoryService.getSubCategoryProduct(i))
+                        .onItem()
+                        .transform(subCategoryProductResponses -> {
+                            products.forEach(product -> subCategoryProductResponses.stream()
+                                    .filter(sub -> product.getCategoryId().longValue() == sub.productId.longValue())
+                                    .forEach(result -> {
+                                        product.setSubCategoryId(result.getSubCategoryId());
+                                        product.setSubCategoryName(result.subCategoryName);
+                                    }));
+                            return products;
+                        })
+                ).onItem().transform(p->Response.ok().entity(p).type(MediaType.APPLICATION_JSON_TYPE).build());
 
     }
+
+
+
 }
 
