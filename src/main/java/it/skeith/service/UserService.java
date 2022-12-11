@@ -40,4 +40,8 @@ public class UserService {
     public Uni<User> saveorUpdate(User user) {
        return userRepo.saveorUpdate(user);
     }
+
+    public Uni<User>getByUsername(String username){
+        return  userRepo.getByUsername(username);
+    }
 }

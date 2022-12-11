@@ -41,6 +41,10 @@ public class UserRepo  implements PanacheRepository<User>  {
         return saveorUpdate(user);
     }
 
+    public Uni<User>getByUsername(String username){
+        return find("username",username).firstResult();
+    }
+
 
 
 

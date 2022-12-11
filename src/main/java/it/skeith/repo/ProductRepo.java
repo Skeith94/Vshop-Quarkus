@@ -6,7 +6,6 @@ import io.quarkus.panache.common.Parameters;
 import io.smallrye.mutiny.Uni;
 import it.skeith.entity.Product;
 import it.skeith.payload.response.GetByCategoryResponse;
-import it.skeith.payload.response.SubCategoryProductResponse;
 import org.hibernate.reactive.mutiny.Mutiny.SessionFactory;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,6 +37,13 @@ public class ProductRepo implements PanacheRepository<Product> {
         return sf.withTransaction((s,t)->s.createQuery(
                         "select new it.skeith.payload.response.GetByCategoryResponse(p.id, p.name, p.description, p.price, p.discount, p.quantity,c.id,c.name) from Product p join  p.category c where c.id = :id and p.visible = true",GetByCategoryResponse.class)
                 .setParameter("id",id)
+                .getResultList());
+    }
+
+    public Uni<List<Product>>GetBySubCategoryResponse(List<Long> ids){
+        return sf.withTransaction((s, t)->s.createQuery(
+                        "select p from Product p left join fetch p.subCategory sub left join fetch p.category where sub.id in:ids ",Product.class)
+                .setParameter("ids",ids)
                 .getResultList());
     }
 

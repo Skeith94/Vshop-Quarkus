@@ -8,7 +8,6 @@ import it.skeith.entity.Product;
 import it.skeith.entity.SubCategory;
 import it.skeith.payload.request.ProductRequest;
 import it.skeith.payload.request.UpdateProductRequest;
-import it.skeith.payload.response.CategorySubCatResponse;
 import it.skeith.payload.response.GetByCategoryResponse;
 import it.skeith.repo.ProductRepo;
 import it.skeith.service.CategoryService;
@@ -23,9 +22,12 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicMarkableReference;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 @Path("/product")
 public class ProductController {
@@ -50,19 +52,31 @@ public class ProductController {
     @ReactiveTransactional
     public Uni<Response> save(@Valid @RequestBody ProductRequest request) {
 
-        Uni<Product> findName = Panache.withTransaction(() -> productService.findByname(request.getName().trim().toLowerCase())).onItem().ifNotNull().failWith(new WebApplicationException("product name already use"));
-        Uni<Category> findCategory = Panache.withTransaction(() -> categoryService.findById(request.getCategoryId())).onItem().ifNull().failWith(new WebApplicationException("category not found"));
+        Uni<Product> findName = Panache.withTransaction(() -> productService.findByname(request.getName().trim().toLowerCase()))
+                .onItem().ifNotNull()
+                .failWith(new WebApplicationException("product name already use"));
+        Uni<Category> findCategory = Panache.withTransaction(() -> categoryService.findById(request.getCategoryId()))
+                .onItem()
+                .ifNull()
+                .failWith(new WebApplicationException("category not found"));
 
-        return Uni.combine().all().unis(findName, findCategory).asTuple().onItem().transform(tuple -> {
-            Set<SubCategory> subCategories = new HashSet<>();
+        return Uni.combine()
+                .all()
+                .unis(findName, findCategory)
+                .asTuple().
+                onItem()
+                .transform(tuple ->
+                {
+                    Set<SubCategory> subCategories = new HashSet<>();
+                     for (Long id : request.getSubCategoryId())
+                         tuple.getItem2().getSubCategories().stream().filter(s -> s.getId().longValue() == id.longValue()).forEach(subCategories::add);
 
-            for (Long id : request.getSubCategoryId())
-                tuple.getItem2().getSubCategories().stream().filter(s -> s.getId().longValue() == id.longValue()).forEach(subCategories::add);
-
-
-            return new Product(request.getName().trim().toLowerCase(), request.getDescription(), request.getPrice(), request.getQuantity(), tuple.getItem2(), request.getDiscount(), subCategories);
-
-        }).onItem().transformToUni(product -> Panache.withTransaction(() -> productService.persist(product)).onItem().transform(p -> Response.status(Response.Status.CREATED).type(MediaType.APPLICATION_JSON_TYPE).entity(p).build()));
+                     return new Product(request.getName().trim().toLowerCase(), request.getDescription(), request.getPrice(), request.getQuantity(), tuple.getItem2(), request.getDiscount(), subCategories);
+                })
+                .onItem()
+                .transformToUni(product -> Panache.withTransaction(() -> productService.persist(product))
+                        .onItem()
+                        .transform(p -> Response.status(Response.Status.CREATED).type(MediaType.APPLICATION_JSON_TYPE).entity(p).build()));
     }
 
     @Path("/update/{productId}")
@@ -70,11 +84,19 @@ public class ProductController {
     @ReactiveTransactional
     public Uni<Response> updateProduct(@RequestBody @Valid UpdateProductRequest request, @PathParam("productId") Long id) {
 
-        Uni<Product> productUni = Panache.withTransaction(() -> productService.getById(id)).onItem().ifNull().failWith(new WebApplicationException("product no found"));
+        Uni<Product> productUni = Panache.withTransaction(() -> productService.getById(id))
+                .onItem()
+                .ifNull()
+                .failWith(new WebApplicationException("product no found"));
 
         if (request.getCategoryId() != null) {
-            Uni<Category> categoryUni = Panache.withTransaction(() -> categoryService.findById(request.getCategoryId())).onItem().ifNull().failWith(new WebApplicationException("category not found"));
+            Uni<Category> categoryUni = Panache.withTransaction(() -> categoryService.findById(request.getCategoryId()))
+                    .onItem()
+                    .ifNull()
+                    .failWith(new WebApplicationException("category not found"));
+
             return Uni.combine().all().unis(productUni, categoryUni).asTuple().onItem().transform(tuple -> {
+
                 tuple.getItem1().setCategory(tuple.getItem2());
                 Set<SubCategory> subCategories = new HashSet<>();
 
@@ -97,8 +119,13 @@ public class ProductController {
     @Path("/GetByid/{id}")
     public Uni<Response> getProduct(@PathParam("id") Long id) {
 
-        return Panache.withTransaction(() -> productService.getById(id).onItem().ifNull().failWith(new WebApplicationException("product not found"))
-                .onItem().ifNotNull().transform(product -> Response.ok().entity(product).type(MediaType.APPLICATION_JSON_TYPE).build()));
+        return Panache.withTransaction(() -> productService.getById(id)
+                .onItem()
+                .ifNull()
+                .failWith(new WebApplicationException("product not found"))
+                .onItem()
+                .ifNotNull()
+                .transform(product -> Response.ok().entity(product).type(MediaType.APPLICATION_JSON_TYPE).build()));
     }
 
 
@@ -135,6 +162,15 @@ public class ProductController {
                 ).onItem().transform(p->Response.ok().entity(p).type(MediaType.APPLICATION_JSON_TYPE).build());
 
     }
+
+    @GET
+    @Path("/getBySubcategory/")
+    public Uni<Response>getBySubcategory(@QueryParam("SubcategoryId") List <Long> ids){
+        return Panache.withTransaction(()->productService.GetBySubCategoryResponse(ids)).onItem().transform(i->Response.ok().entity(i).build());
+
+    }
+
+
 
 
 

@@ -15,6 +15,7 @@ C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\ProductReque
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\GetByCategoryResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\CategorySubCatResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\entity\Category.java
+C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\response\SubCategoryProductResponse.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\payload\request\DownloadFormData.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\controller\CategoryController.java
 C:\Users\Vito\Vshop-Quarkus\src\main\java\it\skeith\service\CategoryService.java

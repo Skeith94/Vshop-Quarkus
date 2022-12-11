@@ -19,7 +19,7 @@ public class ProductRequest {
    private String description;
    @Positive
    private Float price;
-   @Positive
+
    private Long discount;
    @Min(1)
    private Long quantity;

@@ -32,4 +32,9 @@ public class ProductService {
     public Uni<List<GetByCategoryResponse>> getByCategory(Long id) {
         return productRepo.getByCategory(id);
     }
+
+    public Uni<List<Product>>GetBySubCategoryResponse(List<Long> ids){
+        return productRepo.GetBySubCategoryResponse(ids);
+    }
+
 }

@@ -53,8 +53,14 @@ public class PhotosController {
     @ReactiveTransactional
     public Uni<Response> addPhotos(@PathParam("productId") Long productId, @RestForm @Schema(implementation = UploadItemSchema.class) FileUpload photo) {
 
-        return   Panache.withTransaction(()->productService.getById(productId)).onItem().ifNull().failWith(new WebApplicationException("product not found"))
-                .onItem().ifNotNull().transform(Unchecked.function(product ->{
+        return   Panache.withTransaction(()->productService.getById(productId))
+                .onItem()
+                .ifNull()
+                .failWith(new WebApplicationException("product not found"))
+                .onItem()
+                .ifNotNull()
+                .transform(Unchecked.function(product ->{
+
                     if (photo.size() > imageSize) {
                         throw new WebApplicationException("invalid size");
                     }
@@ -75,7 +81,11 @@ public class PhotosController {
 
                     return new Photos(productId,bytes,photo.contentType(),photo.fileName());
 
-                })).onItem().transformToUni(i->Panache.withTransaction(()->Photos.persist(i)).onItem().transform(p -> Response.status(Response.Status.ACCEPTED).build()));
+                }))
+                .onItem()
+                .transformToUni(i->Panache.withTransaction(()->Photos.persist(i))
+                        .onItem()
+                        .transform(p -> Response.status(Response.Status.ACCEPTED).build()));
     }
 
     @GET
@@ -83,12 +93,11 @@ public class PhotosController {
     @Path("/getphoto/{productId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> getPhotos(@PathParam("productId") Long productId) {
-        return Photos.list(productId).map(Unchecked.function(photos -> {
-
-                    return Response.ok().entity(photos).type(MediaType.APPLICATION_JSON_TYPE).build();
-                })
+        return Panache.withTransaction(()->Photos.list(productId))
+                .map(Unchecked.function(photos -> Response.ok().entity(photos)
+                        .type(MediaType.APPLICATION_JSON_TYPE)
+                        .build())
         );
-
 
     }
 
@@ -97,7 +106,8 @@ public class PhotosController {
     @Path("/getRandomPhoto/{productId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> getRandomPhoto(@PathParam("productId") Long productId) {
-        return Photos.list(productId).map(Unchecked.function(photos -> {
+        return Photos.list(productId)
+                .map(Unchecked.function(photos -> {
                     List<byte[]> bytePhotos = new ArrayList<>();
                     photos.stream().map(Photos::getPhoto).forEach(bytePhotos::add);
                     List<BufferedImage> img = new ArrayList<>();
