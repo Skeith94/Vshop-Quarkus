@@ -1,4 +1,4 @@
-docker run  --rm -dit -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_ROOT_HOST=172.17.0.1 -p 3306:3306 --name=mysql -d mysql/mysql-server:latest
+docker run  -dit -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_ROOT_HOST=172.17.0.1 -p 3306:3306 --name=mysql -d mysql/mysql-server:latest
 
 Guide for create ReplicaSet cluster  on docker
 
